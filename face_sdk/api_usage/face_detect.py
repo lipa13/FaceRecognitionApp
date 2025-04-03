@@ -15,7 +15,7 @@ import numpy as np
 from core.model_loader.face_detection.FaceDetModelLoader import FaceDetModelLoader
 from core.model_handler.face_detection.FaceDetModelHandler import FaceDetModelHandler
 
-with open('face_sdk/config/model_conf.yaml') as f:
+with open('config/model_conf.yaml') as f:
     model_conf = yaml.load(f)
 
 if __name__ == '__main__':
@@ -48,7 +48,7 @@ if __name__ == '__main__':
         logger.info('Successfully loaded the face detection model!')
 
     # read image
-    image_path = 'face_sdk/api_usage/test_images/test1.jpg'
+    image_path = 'api_usage/test_images/test1.jpg'
     image = cv2.imread(image_path, cv2.IMREAD_COLOR)
     faceDetModelHandler = FaceDetModelHandler(model, 'cuda:0', cfg)
 
@@ -62,8 +62,8 @@ if __name__ == '__main__':
        logger.info('Successful face detection!')
 
     # gen result
-    save_path_img = 'face_sdk/api_usage/temp/test1_detect_res.jpg'
-    save_path_txt = 'face_sdk/api_usage/temp/test1_detect_res.txt'
+    save_path_img = 'api_usage/temp/test1_detect_res.jpg'
+    save_path_txt = 'api_usage/temp/test1_detect_res.txt'
     
     bboxs = dets
     with open(save_path_txt, "w") as fd:
