@@ -14,8 +14,8 @@ from math import ceil
 from itertools import product as product
 import torch.backends.cudnn as cudnn
 
-from face_sdk.core.model_handler.BaseModelHandler import BaseModelHandler
-from face_sdk.utils.BuzException import *
+from core.model_handler.BaseModelHandler import BaseModelHandler
+from utils.BuzException import *
 
 
 class FaceDetModelHandler(BaseModelHandler):

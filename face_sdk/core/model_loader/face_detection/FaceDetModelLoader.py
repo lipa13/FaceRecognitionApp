@@ -9,7 +9,7 @@ logger = logging.getLogger('sdk')
 
 import torch
 
-from face_sdk.core.model_loader.BaseModelLoader import BaseModelLoader
+from core.model_loader.BaseModelLoader import BaseModelLoader
 
 class FaceDetModelLoader(BaseModelLoader):
     def __init__(self, model_path, model_category, model_name, meta_file='model_meta.json'):
