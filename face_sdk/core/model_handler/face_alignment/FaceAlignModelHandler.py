@@ -10,7 +10,7 @@ logger = logging.getLogger('sdk')
 import cv2
 import torch
 import numpy as np
-import torch.backends.cudnn as cudnn
+#import torch.backends.cudnn as cudnn
 
 from core.model_handler.BaseModelHandler import BaseModelHandler
 from utils.BuzException import *
@@ -37,7 +37,7 @@ class FaceAlignModelHandler(BaseModelHandler):
         Returns:
             A numpy array, the landmarks prediction based on the shape of original image, shape: (106, 2), 
         """
-        cudnn.benchmark = True
+        #cudnn.benchmark = True
         try:
             image_pre = self._preprocess(image, dets)
         except Exception as e:

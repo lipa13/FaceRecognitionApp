@@ -12,11 +12,12 @@ logging.config.fileConfig("config/logging.conf")
 logger = logging.getLogger('sdk')
 
 import torch
+torch.set_default_device("cpu")
 import torch.nn.functional as F
 import numpy as np
 from math import ceil
 from itertools import product as product
-import torch.backends.cudnn as cudnn
+#import torch.backends.cudnn as cudnn
 
 from core.model_handler.BaseModelHandler import BaseModelHandler
 from utils.transform import *
@@ -40,6 +41,7 @@ class FaceParsingModelHandler(BaseModelHandler):
     def __init__(self, model=None, device=None, cfg=None):
         super().__init__(model, device, cfg)
         
+        self.device = device if device is not None else torch.device("cpu") # DODANE
         self.model = model.to(self.device)
     def _preprocess(self, image, face_nums):
         """Preprocess the image, such as standardization and other operations.
@@ -61,23 +63,26 @@ class FaceParsingModelHandler(BaseModelHandler):
         Returns:
              
         """
-        cudnn.benchmark = True
+        #cudnn.benchmark = True
         try:
             image_pre = self._preprocess(images, face_nums)
         except Exception as e:
             raise e
+
         setting = pretrain_settings['lapa/448']
         images = image_pre.float() / 255.0
         _, _, h, w = images.shape
+
         simages = images.to(self.device)
-        matrix = setting['get_matrix_fn'](landmarks.to(self.device))
-        grid = setting['get_grid_fn'](matrix=matrix, orig_shape=(h, w))
-        inv_grid = setting['get_inv_grid_fn'](matrix=matrix, orig_shape=(h, w))
+
+        matrix = setting['get_matrix_fn'](landmarks.to(self.device)).to(self.device)
+        grid = setting['get_grid_fn'](matrix=matrix, orig_shape=(h, w)).to(self.device)
+        inv_grid = setting['get_inv_grid_fn'](matrix=matrix, orig_shape=(h, w)).to(self.device)
 
         w_images = F.grid_sample(
             simages, grid, mode='bilinear', align_corners=False)
 
-        w_seg_logits, _ = self.model(w_images)  # (b*n) x c x h x w
+        w_seg_logits, _ = self.model(w_images.to(self.device))  # (b*n) x c x h x w
 
         seg_logits = F.grid_sample(
             w_seg_logits, inv_grid, mode='bilinear', align_corners=False)

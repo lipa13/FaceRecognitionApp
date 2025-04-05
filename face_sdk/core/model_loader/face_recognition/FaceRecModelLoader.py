@@ -21,7 +21,20 @@ class FaceRecModelLoader(BaseModelLoader):
         
     def load_model(self):
         try:
-            model = torch.load(self.cfg['model_file_path'])
+            #model = torch.load(self.cfg['model_file_path'])
+
+            device = torch.device("cpu")
+            model = torch.load(
+                self.cfg['model_file_path'],
+                map_location=device,
+                weights_only=False  # allow loading full model if trusted
+            )
+            
+            if hasattr(model, 'module'):
+                model = model.module
+
+            model = model.to(device)
+            model.eval()
         except Exception as e:
             logger.error('The model failed to load, please check the model path: %s!'
                          % self.cfg['model_file_path'])
@@ -29,3 +42,4 @@ class FaceRecModelLoader(BaseModelLoader):
         else:
             logger.info('Successfully loaded the face recognition model!')
             return model, self.cfg
+            #return model.to(device), self.cfg

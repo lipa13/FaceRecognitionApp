@@ -12,7 +12,7 @@ import torch
 import numpy as np
 from math import ceil
 from itertools import product as product
-import torch.backends.cudnn as cudnn
+# import torch.backends.cudnn as cudnn
 
 from core.model_handler.BaseModelHandler import BaseModelHandler
 from utils.BuzException import *
@@ -40,7 +40,7 @@ class FaceDetModelHandler(BaseModelHandler):
             A numpy array, the shape is N * (x, y, w, h, confidence), 
             N is the number of detection box.
         """
-        cudnn.benchmark = True
+        #cudnn.benchmark = True
         input_height, input_width, _ = image.shape
         try:
             image, scale = self._preprocess(image)

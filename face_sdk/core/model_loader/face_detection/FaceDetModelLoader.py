@@ -26,8 +26,16 @@ class FaceDetModelLoader(BaseModelLoader):
     def load_model(self):
         try:
             # model = torch.load(self.cfg['model_file_path'])
-            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-            model = torch.load(self.cfg['model_file_path'], map_location=device)
+            
+            #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            #model = torch.load(self.cfg['model_file_path'], map_location=device)
+
+            device = torch.device("cpu")
+            model = torch.load(
+                self.cfg['model_file_path'],
+                map_location=device,
+                weights_only=False  # allow loading full model if trusted
+            )
         except Exception as e:
             logger.error('The model failed to load, please check the model path: %s!'
                          % self.cfg['model_file_path'])

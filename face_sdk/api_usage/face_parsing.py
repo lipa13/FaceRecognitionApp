@@ -27,7 +27,7 @@ from core.model_loader.face_alignment.FaceAlignModelLoader import FaceAlignModel
 from core.model_handler.face_alignment.FaceAlignModelHandler import FaceAlignModelHandler
 
 with open('config/model_conf.yaml') as f:
-    model_conf = yaml.safe_load(f,Loader=yaml.FullLoader)
+    model_conf = yaml.load(f,Loader=yaml.FullLoader)
 
 if __name__ == '__main__':
     # common setting for all models, need not modify.
@@ -41,7 +41,8 @@ if __name__ == '__main__':
     try:
         faceDetModelLoader = FaceDetModelLoader(model_path, model_category, model_name)
         model, cfg = faceDetModelLoader.load_model()
-        faceDetModelHandler = FaceDetModelHandler(model, 'cuda:0', cfg)
+        #faceDetModelHandler = FaceDetModelHandler(model, 'cuda:0', cfg)
+        faceDetModelHandler = FaceDetModelHandler(model, 'cpu', cfg)
     except Exception as e:
         logger.error('Falied to load face detection Model.')
         logger.error(e)
@@ -56,7 +57,8 @@ if __name__ == '__main__':
     try:
         faceAlignModelLoader = FaceAlignModelLoader(model_path, model_category, model_name)
         model, cfg = faceAlignModelLoader.load_model()
-        faceAlignModelHandler = FaceAlignModelHandler(model, 'cuda:0', cfg)
+        #faceAlignModelHandler = FaceAlignModelHandler(model, 'cuda:0', cfg)
+        faceAlignModelHandler = FaceAlignModelHandler(model, 'cpu', cfg)
     except Exception as e:
         logger.error('Failed to load face landmark model.')
         logger.error(e)
@@ -72,7 +74,8 @@ if __name__ == '__main__':
     try:
         faceParsingModelLoader = FaceParsingModelLoader(model_path, model_category, model_name)
         model, cfg = faceParsingModelLoader.load_model()
-        faceParsingModelHandler = FaceParsingModelHandler(model, 'cuda:0', cfg)
+        #faceParsingModelHandler = FaceParsingModelHandler(model, 'cuda:0', cfg)
+        faceParsingModelHandler = FaceParsingModelHandler(model, 'cpu', cfg)
     except Exception as e:
         logger.error('Falied to load face parsing Model.')
         logger.error(e)
