@@ -1,5 +1,6 @@
 non-mask:
-    face_detection: face_detection_1.0
+    # face_detection: face_detection_1.0
+    face_detection: face_detection_retina
     face_alignment: face_alignment_1.0
     face_recognition: face_recognition_1.0
     face_parsing: face_parsing_1.0
