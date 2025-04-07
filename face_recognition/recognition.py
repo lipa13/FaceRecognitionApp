@@ -35,11 +35,37 @@ def recognize_face(image_path, db_path="face_recognition/data/embeddings.pkl", t
     best_match = "Unknown"
     best_score = -1
 
-    for name, ref_embedding in db.items():
-        score = cosine_similarity(embedding, ref_embedding)
-        print(f"[INFO] Similarity with {name}: {score:.3f}")
-        if score > best_score:
-            best_score = score
+    #for name, ref_embedding in db.items():
+        #score = cosine_similarity(embedding, ref_embedding)
+        #print(f"[INFO] Similarity with {name}: {score:.3f}")
+
+        # if score > best_score:
+        #     best_score = score
+        #     best_match = name
+    
+    for name, embeddings_list in db.items():
+        # Support both single and multiple embeddings (for backward compatibility)
+        if not isinstance(embeddings_list, list):
+            embeddings_list = [embeddings_list]
+
+        # Compute similarity for each stored embedding
+        # person_best = max(cosine_similarity(embedding, ref_emb) for ref_emb in embeddings_list)
+
+        # print(f"[INFO] Max similarity with {name}: {person_best:.3f}")
+
+        print(f"\n[INFO] Similarities with {name}:")
+
+        # Compute and print similarity for each embedding
+        scores = []
+        for i, ref_emb in enumerate(embeddings_list):
+            score = cosine_similarity(embedding, ref_emb)
+            scores.append(score)
+            print(f"    - Embedding {i+1}: {score:.3f}")
+
+        person_best = max(scores)
+
+        if person_best > best_score:
+            best_score = person_best
             best_match = name
 
     if best_score < threshold:
