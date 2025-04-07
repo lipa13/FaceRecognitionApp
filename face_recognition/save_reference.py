@@ -2,7 +2,7 @@ import cv2
 import os
 import pickle
 
-from face_sdk_wrapper import FaceSDKWrapper
+from face_recognition.face_sdk_wrapper import FaceSDKWrapper
 
 def save_reference(image_path, person_name, output_db="face_recognition/data/embeddings.pkl"):
     # Load image

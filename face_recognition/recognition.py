@@ -2,7 +2,7 @@ import cv2
 import os
 import pickle
 import numpy as np
-from face_sdk_wrapper import FaceSDKWrapper
+from face_recognition.face_sdk_wrapper import FaceSDKWrapper
 
 # Cosine similarity
 def cosine_similarity(a, b):
@@ -72,7 +72,7 @@ def recognize_face(image_path, db_path="face_recognition/data/embeddings.pkl", t
         best_match = "Unknown"
 
     print(f"\n[RESULT] Best match: {best_match} (score: {best_score:.3f})")
-    return best_match
+    return best_match, best_score
 
 if __name__ == "__main__":
     image_path = input("Path to image for recognition: ")

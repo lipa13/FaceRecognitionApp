@@ -3,6 +3,8 @@ from tkinter import messagebox, filedialog
 import cv2
 from PIL import Image, ImageTk
 
+from face_recognition.recognition import recognize_face
+
 def create_fr_view(parent_root):
     root = tk.Toplevel(parent_root)
     root.geometry("1000x600")
@@ -11,6 +13,8 @@ def create_fr_view(parent_root):
 
     main_frame = tk.Frame(root, bg="white")
     main_frame.pack(expand=True)
+
+    selected_image_path = tk.StringVar()
 
     # # LEWA STRONA
     # ref_frame = tk.Frame(main_frame, bg="white")
@@ -61,6 +65,7 @@ def create_fr_view(parent_root):
 
         if filepath:
             try:
+                selected_image_path.set(filepath)
                 img = Image.open(filepath)
                 img = img.resize((640, 360))
                 img_tk = ImageTk.PhotoImage(img)
@@ -115,8 +120,21 @@ def create_fr_view(parent_root):
     start_frame = tk.Frame(main_frame, bg="white")
     start_frame.pack(side="left", padx=30, pady=30)
 
-    start_btn = tk.Button(start_frame, text="Start", bg="#6a4cbb", fg="white", font=("Inter", 16, "bold"))
+    # Funkcja realizujaca rozpoznawanie twarzy
+    def recognize_selected_image():
+        if not selected_image_path.get():
+            messagebox.showwarning("Warning", "Please select an image first.")
+            return
+        try:
+            match, score = recognize_face(selected_image_path.get())
+            messagebox.showinfo("Result", f"Best match: {match} (score: {score:.3f})")
+        except Exception as e:
+            messagebox.showerror("Error", f"Recognition failed:\n{e}")
+
+
+    start_btn = tk.Button(start_frame, text="Start", bg="#6a4cbb", fg="white", font=("Inter", 16, "bold"), command=recognize_selected_image)
     start_btn.pack(anchor="center")
+
 
     # Przycisk powrotu do MainView
     def go_back():
