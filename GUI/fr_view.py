@@ -7,6 +7,7 @@ from face_recognition.recognition import recognize_face
 
 def create_fr_view(parent_root):
     root = tk.Toplevel(parent_root)
+    root.title("Face Recognition View")
     root.geometry("1000x600")
 
     root.config(bg="white")
@@ -86,41 +87,40 @@ def create_fr_view(parent_root):
                            font=("Inter", 16, "bold"))
     camera_btn.pack(pady=5)
 
-    # camera_label = tk.Label(rec_btn_frame, bg="black")
-    #
-    # cap = None
-    #
-    #
-    # def update_camera_frame():
-    #     ret, frame = cap.read()
-    #     if ret:
-    #         frame = cv2.resize(frame, (640, 360))
-    #         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    #         img = Image.fromarray(frame)
-    #         imgtk = ImageTk.PhotoImage(image=img)
-    #         camera_label.imgtk = imgtk
-    #         camera_label.config(image=imgtk)
-    #     camera_label.after(10, update_camera_frame)
-    #
-    #
-    # def start_camera():
-    #     nonlocal cap
-    #     cap = cv2.VideoCapture(0)
-    #     if not cap.isOpened():
-    #         tk.messagebox.showerror("Error", "Could not open camera.")
-    #         return
-    #     rec_btn_inner.place_forget()  # Ukryj przyciski
-    #     camera_label.place(relx=0.5, rely=0.5, anchor="center", width=640, height=360)  # Pokaż kamerę
-    #     update_camera_frame()
-    #
-    #
-    # camera_btn.config(command=start_camera)
+    camera_label = tk.Label(rec_btn_frame, bg="black")
+    cap = None
+
+
+    def start_camera():
+        rec_btn_inner.place_forget()
+        camera_label.place(relx=0.5, rely=0.5, anchor="center", width=640, height=360)
+
+        cap = cv2.VideoCapture(0)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+
+        def update_frame():
+            ret, frame = cap.read()
+            if ret:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                img = Image.fromarray(frame)
+                img_tk = ImageTk.PhotoImage(image=img)
+
+                camera_label.imgtk = img_tk
+                camera_label.configure(image=img_tk)
+
+            camera_label.after(30, update_frame)
+
+        update_frame()
+
+
+    camera_btn.config(command=start_camera)
 
     # PRAWA STRONA
     start_frame = tk.Frame(main_frame, bg="white")
     start_frame.pack(side="left", padx=30, pady=30)
 
-    # Funkcja realizujaca rozpoznawanie twarzy
+
     def recognize_selected_image():
         if not selected_image_path.get():
             messagebox.showwarning("Warning", "Please select an image first.")
@@ -136,18 +136,19 @@ def create_fr_view(parent_root):
     start_btn.pack(anchor="center")
 
 
-    # Przycisk powrotu do MainView
     def go_back():
-        root.destroy()  # Zamykamy ten widok
-        parent_root.deiconify()  # Pokazujemy z powrotem MainView
+        root.destroy()
+        parent_root.deiconify()
+
 
     back_button = tk.Button(root, text="Back", font=("Inter", 16, "bold"),
                             bg="#6a4cbb", fg="white", command=go_back)
     back_button.pack(pady=10)
 
+
     def on_close():
-        # if cap:
-        #     cap.release()
+        if cap:
+            cap.release()
         parent_root.quit()
         parent_root.destroy()
 
