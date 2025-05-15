@@ -17,27 +17,6 @@ def create_fr_view(parent_root):
 
     selected_image_path = tk.StringVar()
 
-    # # LEWA STRONA
-    # ref_frame = tk.Frame(main_frame, bg="white")
-    # ref_frame.pack(side="left", padx=30, pady=30, fill="y")
-    #
-    # ref_inner = tk.Frame(ref_frame, bg="white")
-    # ref_inner.pack()
-    #
-    # ref_label = tk.Label(ref_inner, text="Reference", font=("Inter", 20, "bold"), bg="white")
-    # ref_label.pack(pady=20)
-    #
-    # ref_btn_frame = tk.Frame(ref_inner, bg="white", bd=4, relief="solid", width=350, height=400)
-    # ref_btn_frame.pack()
-    # ref_btn_frame.pack_propagate(False)
-    #
-    # ref_btn_inner = tk.Frame(ref_btn_frame, bg="white")
-    # ref_btn_inner.place(relx=0.5, rely=0.5, anchor="center")
-    #
-    # ref_btn = tk.Button(ref_btn_inner, text="Add Reference", bg="#6a4cbb", fg="white",
-    #                                  font=("Inter", 16, "bold"))
-    # ref_btn.pack()
-
     # LEWA STRONA
     rec_frame = tk.Frame(main_frame, bg="white")
     rec_frame.pack(side="left", padx=30, pady=30, fill="y")

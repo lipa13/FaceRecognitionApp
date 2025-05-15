@@ -44,14 +44,6 @@ def create_main_view():
                     messagebox.showerror("Error", f"Failed to add image:\n{e}")
             else:
                 messagebox.showwarning("Cancelled", "You must enter a name.")
-            # os.makedirs("references", exist_ok=True)
-            # filename = os.path.basename(filepath)
-            # dest_path = os.path.join("references", filename)
-            # try:
-            #     shutil.copy(filepath, dest_path)
-            #     messagebox.showinfo("Success", f"Image '{filename}' added to references.")
-            # except Exception as e:
-            #     messagebox.showerror("Error", f"Failed to add image:\n{e}")
 
 
     add_ref_btn = tk.Button(frame, text="Add new reference image", bg="#6a4cbb", fg="white", font=("Inter", 16, "bold"),
