@@ -1,34 +1,49 @@
+import os
+import sys
+import csv
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from face_recognition.recognition import recognize_face
+
 def is_image_file(filename):
     image_extensions = ('.jpg', '.jpeg', '.png', '.bmp', '.gif')
     return filename.lower().endswith(image_extensions)
 
 
 def recognize(image_path):
-    result = ""
+    #result = ""
     try:
         match, score = recognize_face(image_path)
-        result += f"Best match = {match}, score = {score:.3f}"
+        return match, score
     except Exception as e:
-        result += f"Recognition failed:\n{e}"
+        return f"Recognition failed: {e}", None
 
-    return result
+    #return result
 
 
 def run_tests(root_folder):
-    # Przeglądanie podfolderów w głównym katalogu
     for item in os.listdir(root_folder):
         subfolder_path = os.path.join(root_folder, item)
-        # Sprawdzamy czy dana ścieżka jest katalogiem
         if os.path.isdir(subfolder_path):
-            print(f"\nFolder: {item}\n") # Print nazwy katalogu
-            n = 1
-            for filename in os.listdir(subfolder_path):
-                file_path = os.path.join(subfolder_path, filename)
-                if os.path.isfile(file_path) and is_image_file(filename):
-                    print(f"\nTest {n}: {recognize(file_path)}")
-                    n = n + 1
-            print("\n")
+            with open(f"Tests/{item}.csv", mode='w', newline='', encoding='utf-8-sig') as csvfile:
+                writer = csv.writer(csvfile, delimiter=";")
+                writer.writerow([item])  # Write folder name as section header
+                
+                print(f"Folder: {item}")
+                n = 1
+                for filename in os.listdir(subfolder_path):
+                    file_path = os.path.join(subfolder_path, filename)
+                    if os.path.isfile(file_path) and is_image_file(filename):
+                        match, score = recognize(file_path)
+                        if score is not None:
+                            writer.writerow([n, f"{score:.3f}", match])
+                        else:
+                            writer.writerow([n, "ERROR", match])
+                        n += 1
+
+                writer.writerow([])  # Empty line between folders
 
 
 if __name__ == "__main__":
-    pass
+    run_tests("Tests/images")

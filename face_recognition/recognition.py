@@ -53,14 +53,14 @@ def recognize_face(image_path, db_path="face_recognition/data/embeddings.pkl", t
 
         # print(f"[INFO] Max similarity with {name}: {person_best:.3f}")
 
-        print(f"\n[INFO] Similarities with {name}:")
+        #print(f"\n[INFO] Similarities with {name}:")
 
         # Compute and print similarity for each embedding
         scores = []
         for i, ref_emb in enumerate(embeddings_list):
             score = cosine_similarity(embedding, ref_emb)
             scores.append(score)
-            print(f"    - Embedding {i+1}: {score:.3f}")
+            #print(f"    - Embedding {i+1}: {score:.3f}")
 
         person_best = max(scores)
 
@@ -71,7 +71,7 @@ def recognize_face(image_path, db_path="face_recognition/data/embeddings.pkl", t
     if best_score < threshold:
         best_match = "Unknown"
 
-    print(f"\n[RESULT] Best match: {best_match} (score: {best_score:.3f})")
+    #print(f"\n[RESULT] Best match: {best_match} (score: {best_score:.3f})")
     return best_match, best_score
 
 if __name__ == "__main__":
