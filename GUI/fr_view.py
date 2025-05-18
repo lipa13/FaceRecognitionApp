@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox, filedialog
 import cv2
 from PIL import Image, ImageTk
+import tempfile
+import os
 
 from face_recognition.recognition import recognize_face
 
@@ -69,6 +71,7 @@ def create_fr_view(parent_root):
     camera_label = tk.Label(rec_btn_frame, bg="black")
     cap = None
     camera_running = False
+    last_frame = None
 
     def start_camera():
         nonlocal cap, camera_running
@@ -83,6 +86,8 @@ def create_fr_view(parent_root):
         def update_frame():
             ret, frame = cap.read()
             if ret and camera_running:
+                nonlocal last_frame
+                last_frame = frame.copy()
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 img = Image.fromarray(frame)
                 img_tk = ImageTk.PhotoImage(image=img)
@@ -101,27 +106,41 @@ def create_fr_view(parent_root):
     start_frame = tk.Frame(main_frame, bg="white")
     start_frame.pack(side="left", padx=30, pady=30)
 
-
     def recognize_selected_image():
-        if not selected_image_path.get():
-            messagebox.showwarning("Warning", "Please select an image first.")
-            return
-        try:
-            match, score = recognize_face(selected_image_path.get())
-            messagebox.showinfo("Result", f"Best match: {match} (score: {score:.3f})")
-        except Exception as e:
-            messagebox.showerror("Error", f"Recognition failed:\n{e}")
+        if selected_image_path.get():
+            # try to recognize from file
+            try:
+                match, score = recognize_face(selected_image_path.get())
+                messagebox.showinfo("Result", f"Best match: {match} (score: {score:.3f})")
+            except Exception as e:
+                messagebox.showerror("Error", f"Recognition failed:\n{e}")
+        elif last_frame is not None:
+            # try to recognize from camera frame
+            try:
+                with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
+                    temp_filename = tmp.name
+                    cv2.imwrite(temp_filename, last_frame)
+
+                match, score = recognize_face(temp_filename)
+                os.remove(temp_filename)
+
+                messagebox.showinfo("Result", f"Best match: {match} (score: {score:.3f})")
+            except Exception as e:
+                messagebox.showerror("Error", f"Recognition from camera failed:\n{e}")
+        else:
+            messagebox.showwarning("Warning", "Please load an image or open the camera first.")
 
 
     start_btn = tk.Button(start_frame, text="Start", bg="#6a4cbb", fg="white", font=("Inter", 16, "bold"), command=recognize_selected_image)
     start_btn.pack(anchor="center")
 
     def reload_view():
-        nonlocal cap, camera_running
+        nonlocal cap, camera_running, last_frame
         if cap:
             camera_label.place_forget()
             camera_label.config(image="")
             camera_running = False
+            last_frame = None
             cap.release()
 
         # Ukryj label z obrazem
@@ -149,10 +168,7 @@ def create_fr_view(parent_root):
 
 
     def on_close():
-        nonlocal cap, camera_running
-        if cap:
-            camera_running = False
-            cap.release()
+        reload_view()
         parent_root.quit()
         parent_root.destroy()
 
