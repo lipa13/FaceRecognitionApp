@@ -68,11 +68,13 @@ def create_fr_view(parent_root):
 
     camera_label = tk.Label(rec_btn_frame, bg="black")
     cap = None
-
+    camera_running = False
 
     def start_camera():
+        nonlocal cap, camera_running
         rec_btn_inner.place_forget()
         camera_label.place(relx=0.5, rely=0.5, anchor="center", width=640, height=360)
+        camera_running = True
 
         cap = cv2.VideoCapture(0)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -80,7 +82,7 @@ def create_fr_view(parent_root):
 
         def update_frame():
             ret, frame = cap.read()
-            if ret:
+            if ret and camera_running:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 img = Image.fromarray(frame)
                 img_tk = ImageTk.PhotoImage(image=img)
@@ -114,6 +116,27 @@ def create_fr_view(parent_root):
     start_btn = tk.Button(start_frame, text="Start", bg="#6a4cbb", fg="white", font=("Inter", 16, "bold"), command=recognize_selected_image)
     start_btn.pack(anchor="center")
 
+    def reload_view():
+        nonlocal cap, camera_running
+        if cap:
+            camera_label.place_forget()
+            camera_label.config(image="")
+            camera_running = False
+            cap.release()
+
+        # Ukryj label z obrazem
+        image_label.place_forget()
+        image_label.config(image="")
+
+        # Wyzeruj ścieżkę do pliku
+        selected_image_path.set("")
+
+        # Pokaż z powrotem przyciski wyboru
+        rec_btn_inner.place(relx=0.5, rely=0.5, anchor="center")
+
+    reload_btn = tk.Button(start_frame, text="Reload", bg="#6a4cbb", fg="white", font=("Inter", 16, "bold"), command=reload_view)
+    reload_btn.pack(anchor="center", pady=(10, 0))
+
 
     def go_back():
         root.destroy()
@@ -126,7 +149,9 @@ def create_fr_view(parent_root):
 
 
     def on_close():
+        nonlocal cap, camera_running
         if cap:
+            camera_running = False
             cap.release()
         parent_root.quit()
         parent_root.destroy()
