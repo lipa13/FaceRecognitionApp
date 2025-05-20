@@ -46,4 +46,4 @@ def run_tests(root_folder):
 
 
 if __name__ == "__main__":
-    run_tests("Tests/images")
+    run_tests("Tests/images/new")
