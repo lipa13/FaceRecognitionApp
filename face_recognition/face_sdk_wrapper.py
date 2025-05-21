@@ -87,17 +87,6 @@ class FaceSDKWrapper:
         return cropped
 
 
-# if __name__ == "__main__":
-#     img_path = input("Enter path to test image: ")
-#     img = cv2.imread(img_path)
-#     sdk = FaceSDKWrapper()
-#     emb = sdk.get_face_embedding(img)
-#     if emb is not None:
-#         print("Embedding extracted successfully!")
-#         print(emb[:5], "...")
-#     else:
-#         print("No face found.")
-
 if __name__ == "__main__":
     img_path = input("Enter path to test image: ")
     image = cv2.imread(img_path)

@@ -7,7 +7,7 @@ from face_recognition.face_sdk_wrapper import FaceSDKWrapper
 from ultralytics import YOLO
 
 # Load YOLOv8 model once (global, to avoid reloading every call)
-yolo_model = YOLO("face_recognition/models/best.pt")  # or "yolov8s.pt" for slightly better accuracy
+yolo_model = YOLO("face_recognition/models/best.pt")
 
 # Cosine similarity
 def cosine_similarity(a, b):
@@ -30,7 +30,7 @@ def recognize_face(image_path, db_path="face_recognition/data/embeddings.pkl", t
         print(f"[ERROR] Could not load image: {image_path}")
         return None
 
-    ### --- Hat Detection Step ---
+    # Cap detection
     results = yolo_model(image)[0]  # Get predictions
     for box in results.boxes:
         cls_id = int(box.cls[0])
@@ -38,9 +38,8 @@ def recognize_face(image_path, db_path="face_recognition/data/embeddings.pkl", t
         label = yolo_model.names[cls_id]
 
         if "cap" in label.lower() and conf > 0.6:
-            print("[WARNING] Hat detected on the head. Please remove your hat before recognition.")
-            return "Hat Detected", 0.0
-    ### -------------------------
+            print("[WARNING] Cap detected on the head. Please remove your cap before recognition.")
+            return "Cap Detected", 0.0
 
     # Extract embedding
     sdk = FaceSDKWrapper()
@@ -52,28 +51,13 @@ def recognize_face(image_path, db_path="face_recognition/data/embeddings.pkl", t
     # Compare with database
     best_match = "Unknown"
     best_score = -1
-
-    #for name, ref_embedding in db.items():
-        #score = cosine_similarity(embedding, ref_embedding)
-        #print(f"[INFO] Similarity with {name}: {score:.3f}")
-
-        # if score > best_score:
-        #     best_score = score
-        #     best_match = name
     
     for name, embeddings_list in db.items():
         # Support both single and multiple embeddings (for backward compatibility)
         if not isinstance(embeddings_list, list):
             embeddings_list = [embeddings_list]
 
-        # Compute similarity for each stored embedding
-        # person_best = max(cosine_similarity(embedding, ref_emb) for ref_emb in embeddings_list)
-
-        # print(f"[INFO] Max similarity with {name}: {person_best:.3f}")
-
-        #print(f"\n[INFO] Similarities with {name}:")
-
-        # Compute and print similarity for each embedding
+        # Compute similarity for each embedding
         scores = []
         for i, ref_emb in enumerate(embeddings_list):
             score = cosine_similarity(embedding, ref_emb)
@@ -91,6 +75,7 @@ def recognize_face(image_path, db_path="face_recognition/data/embeddings.pkl", t
 
     #print(f"\n[RESULT] Best match: {best_match} (score: {best_score:.3f})")
     return best_match, best_score
+
 
 if __name__ == "__main__":
     image_path = input("Path to image for recognition: ")

@@ -1,0 +1,15 @@
+# Deep Learning
+torch>=1.1.0
+torchvision>=0.3.0
+ultralytics
+
+# Image processing
+opencv-python
+scikit-image  # for skimage
+Pillow        # for PIL
+
+# GUI
+tk
+
+# Others
+pyyaml        # for yaml

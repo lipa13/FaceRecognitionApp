@@ -29,18 +29,6 @@ def save_reference(image_path, person_name, output_db="face_recognition/data/emb
     else:
         db = {}
 
-    # Save new reference
-    #db[person_name] = embedding
-
-    # Save or append new embedding
-    # if person_name in db:
-    #     db[person_name].append(embedding)
-    # else:
-    #     db[person_name] = [embedding]
-
-    # with open(output_db, "wb") as f:
-    #     pickle.dump(db, f)
-
     # Store embedding
     if person_name in db:
         # Convert existing numpy array to list if needed
