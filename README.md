@@ -7,8 +7,11 @@ dla aplikacji jest system Windows 10/11 lub Ubuntu Linux w wersji 20.04 lub nows
 ## Wymagania systemowe
 
 * **System operacyjny**: Windows 10/11 lub Ubuntu Linux (20.04 lub nowszy)
+
 * **Python**: wersja 3.7.1 lub nowsza
-* **pip**: zainstalowany menedżer pakietów
+
+* **`pip`**: zainstalowany menedżer pakietów
+
 * **Zalecane**:
     * Środowisko wirtualne (`venv`) do zarządzania zależnościami
     * Dostęp do terminala lub konsoli (cmd / PowerShell / bash)
@@ -18,9 +21,9 @@ dla aplikacji jest system Windows 10/11 lub Ubuntu Linux w wersji 20.04 lub nows
 1. **Pobierz projekt**
 
     ```bash
-      git clone https://github.com/lipa13/FaceRecognitionApp.git
-      cd FaceRecognitionApp
-      ```
+    git clone https://github.com/lipa13/FaceRecognitionApp.git
+    cd FaceRecognitionApp
+    ```
 
 2. **(Zalecane) Utwórz i aktywuj środowisko wirtualne**
 
@@ -42,11 +45,11 @@ dla aplikacji jest system Windows 10/11 lub Ubuntu Linux w wersji 20.04 lub nows
 3. **Zainstaluj zależności**
 
     ```bash
-      pip install -r requirements.txt
-      ```
+    pip install -r requirements.txt
+    ```
 
 4. **Uruchom aplikację**
 
     ```bash
-      python GUI/main_view.py
-      ```  
+    python GUI/main_view.py
+    ```  
