@@ -7,7 +7,7 @@ from face_recognition.face_sdk_wrapper import FaceSDKWrapper
 from ultralytics import YOLO
 
 # Load YOLOv8 model once (global, to avoid reloading every call)
-yolo_model = YOLO("face_recognition/models/best.pt")
+yolo_model = YOLO("face_recognition/models/cap_detection.pt")
 
 # Cosine similarity
 def cosine_similarity(a, b):
