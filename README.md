@@ -10,7 +10,7 @@ dla aplikacji jest system Windows 10/11 lub Ubuntu Linux w wersji 20.04 lub nows
 
 * **Python**: wersja 3.7.1 lub nowsza
 
-* **pip**: zainstalowany menedżer pakietów
+* **`pip`**: zainstalowany menedżer pakietów
 
 * **Zalecane**:
     * Środowisko wirtualne (`venv`) do zarządzania zależnościami
