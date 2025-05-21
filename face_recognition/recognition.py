@@ -4,12 +4,18 @@ import pickle
 import numpy as np
 from face_recognition.face_sdk_wrapper import FaceSDKWrapper
 
+from ultralytics import YOLO
+
+# Load YOLOv8 model once (global, to avoid reloading every call)
+yolo_model = YOLO("face_recognition/models/best.pt")  # or "yolov8s.pt" for slightly better accuracy
+
 # Cosine similarity
 def cosine_similarity(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 # Recognize face from image
 def recognize_face(image_path, db_path="face_recognition/data/embeddings.pkl", threshold=0.6):
+    print(yolo_model.names)
     if not os.path.exists(db_path):
         print(f"Embedding database not found at '{db_path}'")
         return
@@ -23,6 +29,18 @@ def recognize_face(image_path, db_path="face_recognition/data/embeddings.pkl", t
     if image is None:
         print(f"[ERROR] Could not load image: {image_path}")
         return None
+
+    ### --- Hat Detection Step ---
+    results = yolo_model(image)[0]  # Get predictions
+    for box in results.boxes:
+        cls_id = int(box.cls[0])
+        conf = float(box.conf[0])
+        label = yolo_model.names[cls_id]
+
+        if "cap" in label.lower() and conf > 0.6:
+            print("[WARNING] Hat detected on the head. Please remove your hat before recognition.")
+            return "Hat Detected", 0.0
+    ### -------------------------
 
     # Extract embedding
     sdk = FaceSDKWrapper()

@@ -111,7 +111,10 @@ def create_fr_view(parent_root):
             # try to recognize from file
             try:
                 match, score = recognize_face(selected_image_path.get())
-                messagebox.showinfo("Result", f"Best match: {match} (score: {score:.3f})")
+                if match == "Hat Detected":
+                    messagebox.showinfo("Message", "Please, remove your hat before face recognition!")
+                else:
+                    messagebox.showinfo("Result", f"Best match: {match} (score: {score:.3f})")
             except Exception as e:
                 messagebox.showerror("Error", f"Recognition failed:\n{e}")
         elif last_frame is not None:
@@ -124,7 +127,11 @@ def create_fr_view(parent_root):
                 match, score = recognize_face(temp_filename)
                 os.remove(temp_filename)
 
-                messagebox.showinfo("Result", f"Best match: {match} (score: {score:.3f})")
+                if match == "Hat Detected":
+                    messagebox.showinfo("Message", "Please, remove your hat before face recognition!")
+                else:
+                    messagebox.showinfo("Result", f"Best match: {match} (score: {score:.3f})")
+                    
             except Exception as e:
                 messagebox.showerror("Error", f"Recognition from camera failed:\n{e}")
         else:
