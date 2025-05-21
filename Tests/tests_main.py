@@ -12,14 +12,12 @@ def is_image_file(filename):
 
 
 def recognize(image_path):
-    #result = ""
     try:
         match, score = recognize_face(image_path)
         return match, score
     except Exception as e:
         return f"Recognition failed: {e}", None
 
-    #return result
 
 
 def run_tests(root_folder):
@@ -46,4 +44,5 @@ def run_tests(root_folder):
 
 
 if __name__ == "__main__":
-    run_tests("Tests/images")
+    #run_tests("Tests")
+    pass

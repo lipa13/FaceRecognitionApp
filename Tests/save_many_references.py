@@ -24,6 +24,5 @@ def save_all_images_from_folder(folder_path, person_name):
 
 
 if __name__ == "__main__":
-    # Example usage: save references from folder "Tests/reference_images/person_1"
-    save_all_images_from_folder("Tests/images/BAZA/kuba_baza", "Kuba")
-    save_all_images_from_folder("Tests/images/BAZA/szymon_baza", "Szymon")
+    #save_all_images_from_folder("Tests/images/BAZA/kuba_baza", "Kuba")
+    pass
